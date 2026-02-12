@@ -1,0 +1,178 @@
+/* =========================================================
+   1) DESIGN TOKENS (Variablen)
+   ========================================================= */
+:root {
+  --h: clamp(38px, 5vh, 48px);
+  --fs: clamp(14px, 2.2vw, 18px);
+
+  --radius-btn: 20px;
+  --radius-input: 25px;
+
+  --c-border: #000;
+  --c-bg: #fff;
+  --c-primary: #00509b;
+
+  --shadow-hover: 0 0 14px rgba(0, 120, 255, 0.9);
+}
+
+/* =========================================================
+   2) BASE KOMPONENTEN (Optik + Verhalten)
+   ========================================================= */
+
+/* ---------- Base Button ---------- */
+.buttonstyle {
+  height: var(--h);
+  font-size: var(--fs);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 12px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-btn);
+
+  background: var(--c-bg);
+  color: var(--c-primary);
+
+  white-space: nowrap;
+  line-height: 1;
+
+  transition: box-shadow 0.2s ease;
+}
+
+.buttonstyle:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* ---------- Base Input ---------- */
+.searchStyle {
+  height: var(--h);
+  font-size: var(--fs);
+
+  width: 100%;
+  padding: 0 12px;
+
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-input);
+
+  background: var(--c-bg);
+  color: #000;
+}
+
+/* =========================================================
+   3) VARIANTEN / MODIFIER (Spezial-Buttons)
+   ========================================================= */
+
+/* ---------- Fachgebiet-Buttons ---------- */
+.categorystyle {
+  height: 42px;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 16px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-btn);
+
+  background: var(--c-bg);
+  color: var(--c-primary);
+
+  font-size: 18px;
+  white-space: nowrap;
+  line-height: 1;
+
+  transition: box-shadow 0.2s ease;
+}
+
+.categorystyle:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+.categorystyle.active {
+  background: var(--c-primary);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(0, 80, 155, 0.8);
+}
+
+/* ---------- Install Button (nur Inhalt/Overflow) ---------- */
+.installBtn {
+  /* Layout-Breite kommt über Wrapper/Breakpoint */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+  min-width: 0;
+}
+
+/* =========================================================
+   4) LAYOUT-CONTAINER (Breiten / Stacking)
+   ========================================================= */
+
+/* ---------- Fachgebiete-Spalte (Desktop-Bereich) ---------- */
+.fachgebiete {
+  flex: 0 0 250px;
+  max-width: 250px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ---------- Suchfelder Stack ---------- */
+.searchInput {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  align-items: stretch;
+}
+
+/* ---------- Install Wrapper: Mobile Full Width ---------- */
+.installWrap {
+  width: 100%;
+  display: flex;
+}
+
+/* Mobile: Install-Button füllt Wrapper */
+.installWrap > .installBtn {
+  width: 100%;
+}
+
+/* =========================================================
+   5) FLAGS (Optik)
+   ========================================================= */
+
+.flag-box {
+  height: 42px;
+  padding: 0 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  background: var(--c-bg);
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   6) RESPONSIVE OVERRIDES (nur Abweichungen)
+   ========================================================= */
+
+/* Ab Tablet/Desktop: Install-Button NICHT mehr volle Breite */
+/* @media (min-width: 768px) {
+  .installWrap {
+    width: auto; 
+  }
+
+  .installWrap > .installBtn {
+    width: auto; 
+  }
+} */

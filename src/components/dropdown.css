@@ -1,0 +1,28 @@
+.language-menu .dropdown-toggle,
+.fachgebiete-menu .dropdown-toggle {
+  width: 100%;
+}
+
+.language-menu .dropdown-menu,
+.fachgebiete-menu .dropdown-menu {
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 12px;
+  padding: 6px;
+  margin-top: 1px;
+}
+
+.language-menu .dropdown-item,
+.fachgebiete-menu .dropdown-item {
+  white-space: normal;
+  /* overflow-wrap: anywhere; */
+  border-radius: 10px;
+}
+
+.language-menu .dropdown-item:hover,
+.language-menu .dropdown-item.active,
+.fachgebiete-menu .dropdown-item:hover,
+.fachgebiete-menu .dropdown-item.active {
+  background-color: lightgray;
+  color: #00509b;
+}

@@ -1,0 +1,264 @@
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Scrollbars überall ausblenden (Chrome/Edge/Safari + Firefox) */
+* {
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* altes Edge/IE */
+}
+
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+html,
+body {
+  margin: 0;
+  background: #d6d6d6;
+  overflow-x: hidden;
+  line-height: 1;
+}
+
+/* ---------- Layout Wrapper ---------- */
+.main-wrap { 
+    max-width: 1600px; 
+    width: 96vw; 
+    margin: 0 auto; 
+    padding-top: 5%;
+    display: flex; 
+    gap: 20px; 
+    align-items: flex-start; 
+}
+
+/* ---------- Results Grid (formerly .container) ---------- */
+.container {
+  flex: 1 1 auto;
+  width: 100%;
+  height: 70vh;
+
+  margin: 0;
+  padding: 2rem;
+
+  border: 1px solid black;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 1.5rem;
+
+  color: black;
+  align-items: start;
+  overflow-y: auto;
+}
+
+.divider {
+  width: 1px;
+  height: 100%;
+  background-color: #999;
+}
+
+/* ---------- Category Sidebar ---------- */
+.fachgebiete {
+  flex: 0 0 250px;
+  max-width: 250px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ---------- Inputs & Buttons ---------- */
+.searchStyle {
+  height: 42px;
+  padding: 0 12px;
+
+  border: 1px solid black;
+  border-radius: 25px;
+
+  background: white;
+  color: black;
+  font-size: 18px;
+}
+
+.installBtn{
+    max-width: fit-content;
+    padding: 0 10px;
+    font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.buttonstyle{
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 12px;
+    white-space: nowrap;
+    line-height: 1;
+
+    border:1px solid black;
+    color:#00509b;
+    border-radius: 20px;
+    background: white;
+    font-size: 18px;
+    transition: box-shadow 0.2s ease;
+}
+
+.categorystyle{
+    height: 42px;
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    white-space: nowrap;
+    line-height: 1;
+
+    border:1px solid black;
+    color:#00509b;
+    border-radius: 20px;
+    background: white;
+    font-size: 18px;
+    transition: box-shadow 0.2s ease;
+}
+
+.buttonstyle:hover,
+.categorystyle:hover {
+  box-shadow: 0 0 14px rgba(0, 120, 255, 0.9);
+}
+
+.categorystyle {
+  width: 100%;
+  padding: 0 16px;
+}
+
+.categorystyle.active {
+  background: #00509b;
+  color: white;
+  box-shadow: 0 0 12px rgba(0, 80, 155, 0.8);
+}
+
+/* ---------- Flags ---------- */
+.flag-box {
+    height: 42px;
+    padding: 0 16px;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+
+    border: 1px solid black;
+    border-radius: 10px;
+
+    background: white;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+.flag-box:hover {
+  box-shadow: 0 0 8px rgba(0, 80, 155, 0.6);
+}
+
+.flag-box.active {
+  outline: 2px solid #00509b;
+}
+
+.flag-img {
+  height: 100%;
+  width: auto;
+
+  object-fit: contain;
+  display: block;
+}
+
+/* ---------- Header ---------- */
+.headerStyle {
+  position: fixed;
+  top: 3%;
+  left: 0;
+  width: 100%;
+
+  min-height: 100px;
+  padding: 0 1rem;
+
+  z-index: 1000;
+  /* border-bottom: 1px solid black; */
+
+  display: block;
+  /* grid-template-columns: 1fr auto 1fr;
+  align-items: center; */
+  gap: 10px;
+
+  overflow-x: clip;
+}
+
+.headerWrap{
+    max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 1rem;
+    min-height: 100px;
+    display: grid;
+    grid-template-columns: 250px 1fr 250px;
+    align-items: center;
+    gap: 10px;
+}
+
+.header_left{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-start;
+  min-width: 0;
+}
+
+.header_mid{
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
+}
+
+.header_right{
+  /* width: 250px; */
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 768px) {
+    .main-wrap {
+        width: 96%;
+        flex-direction: column;
+    }
+    .container {
+        width: 100%;
+        padding: 1rem;
+        min-height: 300px;
+        grid-template-columns: 1fr;
+    }
+
+    .container .divider {
+        display: none;
+    }
+
+    .fachgebiete {
+        flex: none;
+        width: 100%;
+        max-width: none;
+    }
+}
