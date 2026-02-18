@@ -1,5 +1,14 @@
 # Online and offline scientific dictionary
-## 
+## Overview
+Built with Vite, React, and npm, this project is a single-page dictionary application. It is designed to work both online and offline, providing reliable access to content at all times — on any device with HTTP support.
+
+## Description of the functionality
+When the application starts, a hash table is constructed over the entire dictionary. This hash table stores the indexes of all dictionary entries, sorted by category, and serves as the backbone of the search functionality.<br>
+When the user enters a search query, it is passed to the search() function, which accepts an English word, a German word, and a category. Each word is then forwarded — together with its corresponding language and category — to a dedicated helper function responsible for the core processing: filterDict().<br>
+filterDict() begins by normalizing the input, converting both the search string and the category to lowercase and stripping all whitespace to ensure consistent matching. It then queries the hash table for entries whose first letter matches that of the input word, narrowing the results to the specified category and language. Any matching entries are collected into a set.<br>
+If the input is longer than a single character, each entry in the result set is trimmed to the length of the input string and evaluated using the Levenshtein algorithm. Entries with a similarity below 50% are discarded. The two resulting sets — one for the English query, one for the German — are finally merged by search() and rendered on the screen.<br>
+The dictionary itself is stored as a JSON file, which is periodically fetched from the server to stay up to date. Given that dictionary content rarely changes, the StaleWhileRevalidate caching strategy was chosen as an efficient and appropriate solution. The UI uses a responsive layout, keeping the interface clean and accessible across all screen sizes.
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
