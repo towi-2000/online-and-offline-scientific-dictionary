@@ -9,6 +9,8 @@ filterDict() begins by normalizing the input, converting both the search string 
 If the input is longer than a single character, each entry in the result set is trimmed to the length of the input string and evaluated using the Levenshtein algorithm. Entries with a similarity below 50% are discarded. The two resulting sets — one for the English query, one for the German — are finally merged by search() and rendered on the screen.<br>
 The dictionary itself is stored as a JSON file, which is periodically fetched from the server to stay up to date. Given that dictionary content rarely changes, the StaleWhileRevalidate caching strategy was chosen as an efficient and appropriate solution. The UI uses a responsive layout, keeping the interface clean and accessible across all screen sizes.
 
+# since this project is still in progress there may be some errors and bugs!!!
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
