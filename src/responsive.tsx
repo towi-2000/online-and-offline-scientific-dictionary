@@ -1,6 +1,6 @@
 //Datei, um die responsive Oberfläche zu organisiseren. Die einzelnen Anzeigeelemente sind in Komponenten aufgeteilt, um
 //eine bessere Modularisierung zu erreichen. Die einzelnen Funktionen sind unten erklärt.
-import "./css/responsive.css"
+import "./responsive.css"
 import type { Lang, InstallHelp, Fachgebiet, DictEntry } from "./type"
 import { VITE_FACHGEBIETE_JSON, search, changeLanguage, getFachgebietLabel, init } from './Functions'
 import { useEffect, useState } from "react";
