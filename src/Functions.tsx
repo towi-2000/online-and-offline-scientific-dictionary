@@ -1,9 +1,15 @@
-import type { Fachgebiet, Lang, HeaderKey, DictEntry} from "./type"
+import type { Fachgebiet, Lang, HeaderKey, DictEntry, DataFile, IndexList } from "./type"
 const sensitivity = 50;
 export let VITE_FACHGEBIETE_JSON: Fachgebiet[] = [];
 export let WOERTERBUCH_ERWEITERT: DictEntry[] = [];
-let indexlist: Record<string, number[]> = {};
+let indexlist: IndexList = {};
 declare const __BUILD_ID__: string;
+
+function isDataFile(value: unknown): value is DataFile {
+  if (!value || typeof value !== "object") return false;
+  const v = value as DataFile;
+  return Array.isArray(v.words) && Array.isArray(v.categories);
+}
 
 export async function init(): Promise<void> {
   const url = `${import.meta.env.BASE_URL}data/data.json?v=${__BUILD_ID__}`;
@@ -11,13 +17,10 @@ export async function init(): Promise<void> {
   
   if (!res.ok) throw new Error(`data.json HTTP ${res.status}: ${url}`);
 
-  // Debug: Text aus Clone lesen, Original bleibt für json()
-  const text = await res.clone().text();
-
   const raw: unknown = await res.json();
-  const obj: any = Array.isArray(raw) ? raw[0] : raw;
+  const obj = Array.isArray(raw) ? raw[0] : raw;
 
-  if (!obj || !Array.isArray(obj.words) || !Array.isArray(obj.categories)) {
+  if (!isDataFile(obj)) {
     throw new Error(`data.json hat nicht die Struktur { words: [], categories: [] }`);
   }
 
@@ -35,8 +38,8 @@ export function getWOERTERBUCH_ERWEITERT():DictEntry[]{
   return WOERTERBUCH_ERWEITERT;
 }
 
-function getIndexes() {
-  const index: Record<string, number[]> = {};
+function getIndexes(): IndexList {
+  const index: IndexList = {};
 
   for (let i = 0; i < WOERTERBUCH_ERWEITERT.length; i++) {
     const element = WOERTERBUCH_ERWEITERT[i] as DictEntry;
@@ -94,14 +97,14 @@ function getFachgebietKey(input:string):string{
   return fach
 }
 
-function filterDict(input:string,category:string,lang:Lang){
-  const result = new Set<typeof WOERTERBUCH_ERWEITERT[number]>();
+function filterDict(input:string,category:string,lang:Lang): Set<DictEntry> {
+  const result = new Set<DictEntry>();
   const normalized_input = input.trim().toLowerCase();
   const normalized_category = getFachgebietKey(category);
   let word:string;
   if (!normalized_input) return result;
   
-  if(normalized_category == "all"){
+  if(normalized_category === "all"){
     for(const entry of WOERTERBUCH_ERWEITERT){
       word = (lang === "de" ? entry.ger : entry.eng).trim().toLowerCase();
 
@@ -122,8 +125,8 @@ export function search(
   eng: string,
   ger: string,
   fachgebietKey: string
-){
-  const result = new Set<typeof WOERTERBUCH_ERWEITERT[number]>();
+): DictEntry[] {
+  const result = new Set<DictEntry>();
   for (const r of filterDict(eng,fachgebietKey,"en")) result.add(r);
   for (const r of filterDict(ger,fachgebietKey,"de")) result.add(r);
   return Array.from(result);

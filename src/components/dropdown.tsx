@@ -1,15 +1,12 @@
 import "./dropdown.css"
 import { VITE_FACHGEBIETE_JSON } from "../Functions"
-import Dropdown from 'react-bootstrap/Dropdown';
-type Lang = "de" | "en";
+import Dropdown from "react-bootstrap/Dropdown";
+import type { SelectLanguageDropdownProps, FachgebieteDropdownProps } from "../type";
 
 //stellt das Dropdownmenü für die Sprachauswahl dar (nur mobile Version)
 export function SelectLanguageDropdown({
     language = "de",onChange
-}:{
-    language:Lang;
-    onChange:(lang:Lang) => void;
-}){
+}: SelectLanguageDropdownProps){
   return (
     <Dropdown className='language-menu' align="end">
       <Dropdown.Toggle variant="" id="dropdown-basic">
@@ -28,12 +25,10 @@ export function FachgebieteDropdown({
     onSelect,
     language = "de",
     selectedKey,
-}:{
-    onSelect:(key: string) => void;
-    language?:Lang;
-    selectedKey:string;
-}){
-    const selectedLabel = VITE_FACHGEBIETE_JSON.find((item) => item.key === selectedKey)?.[language];
+}: FachgebieteDropdownProps){
+  const selectedLabel =
+    VITE_FACHGEBIETE_JSON.find((item) => item.key === selectedKey)?.[language] ??
+    (language === "de" ? "Alle" : "All");
 
   return (
     <Dropdown className='fachgebiete-menu'>

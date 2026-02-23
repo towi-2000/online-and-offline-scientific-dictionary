@@ -1,4 +1,4 @@
-import type { InstallHelp, Lang } from "./type"
+import type { InstallHelp, Lang, FirefoxWindow } from "./type"
 
 function isIOS(): boolean {
   return /iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -7,7 +7,7 @@ function isIOS(): boolean {
 export function isFirefox(): boolean {
   const ua = navigator.userAgent;
 
-  const hasInstallTrigger = typeof (window as any).InstallTrigger !== "undefined";
+  const hasInstallTrigger = typeof (window as FirefoxWindow).InstallTrigger !== "undefined";
   if (hasInstallTrigger) return true;
 
   const isFxToken = /Firefox\/\d+/i.test(ua) || /FxiOS\/\d+/i.test(ua);
@@ -17,9 +17,9 @@ export function isFirefox(): boolean {
   return isFxToken && !isSeaMonkey;
 }
 
-export function installFunction(lang:Lang): InstallHelp{
-  if(isFirefox() == false){
-    if(isIOS() == true){
+export function installFunction(_lang:Lang): InstallHelp{
+  if(isFirefox() === false){
+    if(isIOS() === true){
       return "ios"
     }else{
       return "browser"

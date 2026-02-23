@@ -1,23 +1,22 @@
 import "./buttonsandfields.css"
-import { VITE_FACHGEBIETE_JSON, changeLanguage } from '../Functions';
-import { installFunction } from '../installFunction';
+import { VITE_FACHGEBIETE_JSON, changeLanguage } from "../Functions";
+import { installFunction } from "../installFunction";
+import type {
+    Fachgebiet,
+    SelectionButtonsProps,
+    InstallButtonProps,
+    SearchInputsProps,
+    LanguageFlagsProps,
+} from "../type";
 import gerFlag from "../images/germany_flag.png"
 import engFlag from "../images/us_flag.png"
-
-type Fachgebiet = (typeof VITE_FACHGEBIETE_JSON)[number];
-type Lang = "de" | "en";
-type InstallHelp = "none" | "browser" | "ios";
 
 //stellt die Buttons für die Auswahl des Fachgebietes dar (nur Browserversion)
 export function SelectionButtons({
         setSelectedFachgebietKey,
         selectedFachgebietKey,
         lang
-    }:{
-        selectedFachgebietKey: string;
-        setSelectedFachgebietKey: React.Dispatch<React.SetStateAction<string>>;
-        lang:Lang;
-    }){
+    }: SelectionButtonsProps){
     const handleButtonAction = (input:string) => {
         //const key = VITE_FACHGEBIETE_JSON.find(f => f.de === input)?.key ?? null;
         setSelectedFachgebietKey(input);
@@ -41,40 +40,20 @@ export function SelectionButtons({
 //stellt den Installationsbuton dar (beide Versionen)
 export function InstallButton({
     lang,
-    isInstalled,
     setInstallHelp,
-    setIsInstalled,
-}:{
-    lang:Lang;
-    isInstalled:boolean;
-    setIsInstalled:React.Dispatch<React.SetStateAction<boolean>>;
-    setInstallHelp:React.Dispatch<React.SetStateAction<InstallHelp>>;
-}){
+    installHelp: _installHelp,
+}: InstallButtonProps){
 
-    async function installHandler() {
-        const info = await installFunction();
-
-        if(info.type === "SHOW_BROWSER_INSTRUCTIONS"){
-        setInstallHelp("browser");
-        }
-
-        if(info.type === "SHOW_IOS_INSTRUCTIONS"){
-        setInstallHelp("ios");
-        }
-
-        if(info.type === "ALREADY_INSTALLED"){
-        setIsInstalled(true);
-        }
-
-        if(info.type === "PROMPT_AVAILABLE"){setInstallHelp("none");}
+    function installHandler() {
+        const result = installFunction(lang);
+        setInstallHelp(result);
     }
     return(
         <>
             <div className="installWrap">
-                {!isInstalled && (
-                    <button className='installBtn buttonstyle' onClick={installHandler}>
-                    {changeLanguage(lang,"install")}
-                </button>)}
+                <button className='installBtn buttonstyle' onClick={installHandler}>
+                  {changeLanguage(lang,"install")}
+                </button>
             </div>
 
         </>
@@ -88,13 +67,7 @@ export function SearchInputs({
     setSearchValue_eng,
     setSearchValue_ger,
     lang
-}:{
-    setSearchValue_eng:React.Dispatch<React.SetStateAction<string>>;
-    setSearchValue_ger:React.Dispatch<React.SetStateAction<string>>;
-    lang:Lang;
-    searchValue_eng:string;
-    searchValue_ger:string;
-}){
+}: SearchInputsProps){
     const handleEngChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValue_eng(e.target.value);
     };
@@ -129,18 +102,7 @@ export function SearchInputs({
 export function LanguageFlags({
     setLang,
     lang,
-    setSearchValue_eng,
-    setSearchValue_ger,
-    searchValue_eng,
-    searchValue_ger
-}:{
-    lang:Lang;
-    searchValue_eng:string;
-    searchValue_ger:string;
-    setLang: React.Dispatch<React.SetStateAction<Lang>>;
-    setSearchValue_eng:React.Dispatch<React.SetStateAction<string>>;
-    setSearchValue_ger:React.Dispatch<React.SetStateAction<string>>;
-}){
+}: LanguageFlagsProps){
     const handleLanguageSelection = (fachKey: Lang) => {
         setLang(fachKey);
     }

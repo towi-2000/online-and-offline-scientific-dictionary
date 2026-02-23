@@ -1,9 +1,23 @@
 //Datei, um die responsive Oberfläche zu organisiseren. Die einzelnen Anzeigeelemente sind in Komponenten aufgeteilt, um
 //eine bessere Modularisierung zu erreichen. Die einzelnen Funktionen sind unten erklärt.
 import "./responsive.css"
-import type { Lang, InstallHelp, Fachgebiet, DictEntry } from "./type"
+import type {
+  Lang,
+  InstallHelp,
+  Fachgebiet,
+  DictEntry,
+  SelectionButtonsProps,
+  InstallButtonProps,
+  SearchInputsProps,
+  LanguageFlagsProps,
+  SelectLanguageDropdownProps,
+  FachgebieteDropdownProps,
+  OutputBoxProps,
+  MobileLayoutProps,
+  DesktopLayoutProps,
+} from "./type"
 import { VITE_FACHGEBIETE_JSON, search, changeLanguage, getFachgebietLabel, init } from './Functions'
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState, type ChangeEvent } from "react";
 import Dropdown from 'react-bootstrap/Dropdown';
 import { installFunction, ZeigeAnleitung, ZeigeAnleitung_IOS } from './installFunction';
 import gerFlag from "./images/germany_flag.png"
@@ -14,11 +28,7 @@ function SelectionButtons({
         setSelectedFachgebietKey,
         selectedFachgebietKey,
         lang
-    }:{
-        selectedFachgebietKey: string;
-        setSelectedFachgebietKey: React.Dispatch<React.SetStateAction<string>>;
-        lang:Lang;
-    }){
+  }: SelectionButtonsProps){
     const handleButtonAction = (input:string) => {
         setSelectedFachgebietKey(input);
     };
@@ -43,11 +53,7 @@ function InstallButton({
   lang,
   setInstallHelp,
   installHelp,
-}: {
-  lang: Lang;
-  installHelp: InstallHelp;
-  setInstallHelp: React.Dispatch<React.SetStateAction<InstallHelp>>;
-}) {
+}: InstallButtonProps) {
   function installHandler() {
     const result = installFunction(lang);
     setInstallHelp(result);
@@ -92,18 +98,12 @@ function SearchInputs({
     setSearchValue_eng,
     setSearchValue_ger,
     lang
-}:{
-    setSearchValue_eng:React.Dispatch<React.SetStateAction<string>>;
-    setSearchValue_ger:React.Dispatch<React.SetStateAction<string>>;
-    lang:Lang;
-    searchValue_eng:string;
-    searchValue_ger:string;
-}){
-    const handleEngChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+}: SearchInputsProps){
+  const handleEngChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchValue_eng(e.target.value);
     };
 
-        const handleGerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleGerChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchValue_ger(e.target.value);
     };
     
@@ -133,10 +133,7 @@ function SearchInputs({
 export function LanguageFlags({
     setLang,
     lang,
-}:{
-    lang:Lang;
-    setLang: React.Dispatch<React.SetStateAction<Lang>>;
-}){
+}: LanguageFlagsProps){
     const handleLanguageSelection = (fachKey: Lang) => {
         setLang(fachKey);
     }
@@ -156,10 +153,7 @@ export function LanguageFlags({
 //stellt das Dropdownmenü für die Sprachauswahl dar (nur mobile Version)
 function SelectLanguageDropdown({
     language = "de",onChange
-}:{
-    language:Lang;
-    onChange:(lang:Lang) => void;
-}){
+}: SelectLanguageDropdownProps){
   return (
     <Dropdown className='language-menu' align="end">
       <Dropdown.Toggle variant="" id="dropdown-basic">
@@ -178,11 +172,7 @@ function FachgebieteDropdown({
     onSelect,
     language = "de",
     selectedKey,
-}:{
-    onSelect:(key: string) => void;
-    language:Lang;
-    selectedKey:string;
-}){
+}: FachgebieteDropdownProps){
     const selectedLabel = VITE_FACHGEBIETE_JSON.find((item) => item.key === selectedKey)?.[language] ?? (language === "de" ? "Alle" : "All");
 
   return (
@@ -207,21 +197,23 @@ function FachgebieteDropdown({
 }
 
 //stellt die Box für die Ausgabe der Ergebnisse dar (beide Versionen)
-function OutputBox({ results }: { results: DictEntry[] }) {
+function OutputBox({ results }: OutputBoxProps) {
   return (
     <div className="outputbox">
-      {results.map((item) => (
-        <div className="outputrow" key={item.sourceIndex}>
-          <div className="outputcell">
-            <span>{item.ger}{" "}</span>
-            <span className="outputmodule">[{getFachgebietLabel(item.module, "de")}]</span>
+      <div className="outputbox-inner">
+        {results.map((item) => (
+          <div className="outputrow" key={item.sourceIndex ?? `${item.ger}-${item.eng}`}>
+            <div className="outputcell">
+              <span>{item.ger}{" "}</span>
+              <span className="outputmodule">[{getFachgebietLabel(item.module, "de")}]</span>
+            </div>
+            <div className="outputcell">
+              <span>{item.eng}{" "}</span>
+              <span className="outputmodule">[{getFachgebietLabel(item.module, "en")}]</span>
+            </div>
           </div>
-          <div className="outputcell">
-            <span>{item.eng}{" "}</span>
-            <span className="outputmodule">[{getFachgebietLabel(item.module, "en")}]</span>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
@@ -239,19 +231,7 @@ function MobileLayout({
     setSelectedFachgebietKey,
     setInstallHelp,
     installHelp,
-}:{
-    setSearchValue_eng:React.Dispatch<React.SetStateAction<string>>;
-    setSearchValue_ger:React.Dispatch<React.SetStateAction<string>>;
-    lang:Lang;
-    setLang:React.Dispatch<React.SetStateAction<Lang>>;
-    searchValue_eng:string;
-    searchValue_ger:string;
-    results:DictEntry[];
-    selectedFachgebietKey:string;
-    setSelectedFachgebietKey:React.Dispatch<React.SetStateAction<string>>;
-    setInstallHelp:React.Dispatch<React.SetStateAction<InstallHelp>>;
-    installHelp:InstallHelp;
-}){
+}: MobileLayoutProps){
     return(
         <>
             <div className="main-wrap">
@@ -292,70 +272,94 @@ function MobileLayout({
 
 //fügt die oben genannten Komponenten zu einem Desktoplayout zusammen
 function DesktopLayout({
-
-}:{
-
-}){
+  searchValue_eng,
+  searchValue_ger,
+  setSearchValue_eng,
+  setSearchValue_ger,
+  lang,
+  setLang,
+  results,
+  selectedFachgebietKey,
+  setSelectedFachgebietKey,
+  setInstallHelp,
+  installHelp,
+}: DesktopLayoutProps){
     return(
-        <>
-
-        </>
+    <div className="main-wrap desktop">
+      <div className="desktopHeader">
+        <LanguageFlags lang={lang} setLang={setLang} />
+        <SearchInputs
+          lang={lang}
+          searchValue_eng={searchValue_eng}
+          searchValue_ger={searchValue_ger}
+          setSearchValue_eng={setSearchValue_eng}
+          setSearchValue_ger={setSearchValue_ger}
+        />
+        <InstallButton
+          lang={lang}
+          setInstallHelp={setInstallHelp}
+          installHelp={installHelp}
+        />
+      </div>
+      <div className="desktopBody">
+        <OutputBox results={results} />
+        <SelectionButtons
+          selectedFachgebietKey={selectedFachgebietKey}
+          setSelectedFachgebietKey={setSelectedFachgebietKey}
+          lang={lang}
+        />
+      </div>
+    </div>
     )
 }
 
 //zeigt die einzelnen Layouts auf dem Bildschirm an und steuert diese
 export default function Responsive(){
     // const [isMobile, setIsMobile] = useState(window.matchMedia("(max-width: 768px)").matches); //speichert die Breite des 
-    const [isMobile, setIsMobile] = useState(true);
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia("(max-width: 768px)").matches);
     const [searchValue_eng, setSearchValue_eng] = useState(""); //speichert englischen Suchbegriff
     const [searchValue_ger, setSearchValue_ger] = useState(""); //speichert deutschen Suchbegriff
     const [lang, setLang] = useState<Lang>("de"); //speichert die aktuelle Sprache
     const [selectedFachgebietKey, setSelectedFachgebietKey] = useState<string>("all"); //speichert das aktuelle Fachgebiet
-    const [results, setResults] = useState<DictEntry[]>([]);
     const [installHelp, setInstallHelp] = useState<InstallHelp>("none");
     const [loading, setLoading] = useState(true);
     const [loadError, setLoadError] = useState<string | null>(null);
 
     useEffect(() => {
         const mql = window.matchMedia("(max-width: 768px)");
+      setIsMobile(mql.matches);
         const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
         mql.addEventListener("change", handler);
         return () => mql.removeEventListener("change", handler);
     }, []);
 
-    useEffect(() => {
-        const eng = searchValue_eng.trim();
-        const ger = searchValue_ger.trim();
+    const results = useMemo(() => {
+      const eng = searchValue_eng.trim();
+      const ger = searchValue_ger.trim();
 
-        if (!eng && !ger) {
-            setResults([]);
-            return;
-        }
+      if (!eng && !ger) return [];
 
-        const res = search(eng, ger, selectedFachgebietKey);
-        setResults(res);
+      return search(eng, ger, selectedFachgebietKey);
     }, [searchValue_eng, searchValue_ger, selectedFachgebietKey]);
 
     useEffect(() => {
-    let cancelled = false;
+      let cancelled = false;
 
-    (async () => {
+      (async () => {
         try {
-        await init();
-        if (cancelled) return;
-        setLoading(false);
-        } catch (e: any) {
-        if (cancelled) return;
-        setLoadError(e?.message ?? "Daten konnten nicht geladen werden.");
-        setLoading(false)
-        }finally {
-        if (!cancelled) setLoading(false);
+          await init();
+        } catch (e: unknown) {
+          if (cancelled) return;
+          const message = e instanceof Error ? e.message : "Daten konnten nicht geladen werden.";
+          setLoadError(message);
+        } finally {
+          if (!cancelled) setLoading(false);
         }
-    })();
+      })();
 
-    return () => {
+      return () => {
         cancelled = true;
-    };
+      };
     }, []);
 
     if (loading) {
@@ -400,7 +404,17 @@ export default function Responsive(){
         </>
     ):(
         <DesktopLayout
-        
+        searchValue_eng={searchValue_eng}
+        searchValue_ger={searchValue_ger}
+        setSearchValue_eng={setSearchValue_eng}
+        setSearchValue_ger={setSearchValue_ger}
+        lang={lang}
+        setLang={setLang}
+        results={results}
+        selectedFachgebietKey={selectedFachgebietKey}
+        setSelectedFachgebietKey={setSelectedFachgebietKey}
+        setInstallHelp={setInstallHelp}
+        installHelp={installHelp}
         />
     )
 }

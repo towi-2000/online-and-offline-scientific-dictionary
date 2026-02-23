@@ -28,7 +28,7 @@ html, body, #root {
 }
 
 body {
-  /* overflow: hidden; */
+  overflow: hidden;
   background: #d6d6d6;
 }
 
@@ -42,6 +42,12 @@ body {
 
   display: flex;
   align-items: stretch;
+  gap: 12px;
+}
+
+.main-wrap.desktop {
+  flex-direction: column;
+  gap: 20px;
 }
 
 /* =========================================================
@@ -49,11 +55,51 @@ body {
    ========================================================= */
 .content-col {
   height: 100%;
-  width: 100%;
+  flex: 1;
+  min-width: 0;
 
   display: grid;
   grid-template-rows: auto 1fr auto;
   gap: 12px;
+}
+
+.desktopHeader {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+}
+
+.desktopBody {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 16px;
+  align-items: start;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.desktopHeader .searchInput {
+  flex-direction: row;
+  justify-content: center;
+  gap: 16px;
+}
+
+.desktopHeader .searchInput .searchStyle {
+  max-width: 320px;
+}
+
+.desktopHeader .installBtn {
+  width: auto;
+  padding: 0 16px;
+}
+
+.desktopTitle {
+  font-size: clamp(18px, 2.6vw, 24px);
+  font-weight: 700;
+  color: var(--c-primary);
+  line-height: 1.1;
 }
 
 /* =========================================================
@@ -186,6 +232,12 @@ body {
   gap: 12px;
 }
 
+.desktop .fachgebiete {
+  width: 260px;
+  max-width: 260px;
+  flex: 0 0 260px;
+}
+
 /* ---------- Suchfelder Stack ---------- */
 .searchInput {
   width: 100%;
@@ -214,7 +266,25 @@ body {
    ========================================================= */
 .flag-box {
   height: 42px;
-  padding: 0 16px;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  border: none;
+  border-radius: 0;
+  background: transparent;
+
+  cursor: pointer;
+}
+
+.flag-buttons{
+  height: 36px;
+  padding: 0 10px;
+  min-width: 48px;
 
   display: flex;
   align-items: center;
@@ -227,19 +297,11 @@ body {
   cursor: pointer;
 }
 
-.flag-buttons{
-  height: 42px;
-  padding: 0 16px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid var(--c-border);
-  border-radius: 10px;
-  background: var(--c-bg);
-
-  cursor: pointer;
+.flag-img {
+  width: 28px;
+  height: 18px;
+  object-fit: cover;
+  display: block;
 }
 /* =========================================================
    10) DROPDOWN STYLES
@@ -294,8 +356,17 @@ body {
   color: black;
 
   max-height: none;
-  overflow-y: auto;
+  overflow: hidden;
   flex: 1;
+}
+
+.outputbox-inner {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.desktop .outputbox {
+  height: 70vh;
 }
 
 .outputrow {

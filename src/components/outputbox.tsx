@@ -1,30 +1,15 @@
-import { VITE_FACHGEBIETE_JSON,WOERTERBUCH_ERWEITERT } from '../Functions'
+import { getFachgebietLabel } from "../Functions";
 import "./outputbox.css"
-type Fachgebiet = (typeof VITE_FACHGEBIETE_JSON)[number];
-type Lang = "de" | "en";
+import type { FilteredOutputBoxProps } from "../type";
 //stellt die Box für die Ausgabe der Ergebnisse dar (beide Versionen)
 export function OutputBox({
     results,
     selectedFachgebietKey
-}:{
-    results:typeof WOERTERBUCH_ERWEITERT;
-    selectedFachgebietKey:string;
-}){
+}: FilteredOutputBoxProps){
     const visibleResults =
     selectedFachgebietKey === "all"
         ? results
         : results.filter((r) => r.module === selectedFachgebietKey);    
-
-    const getFachgebietLabel = (moduleValue: string, targetLang: Lang) => {
-        const v = moduleValue.trim().toLowerCase();
-
-        const fach =
-        VITE_FACHGEBIETE_JSON.find((f:Fachgebiet) => f.key.trim().toLowerCase() === v) ||
-        VITE_FACHGEBIETE_JSON.find((f:Fachgebiet) => f.de.trim().toLowerCase() === v) ||
-        VITE_FACHGEBIETE_JSON.find((f:Fachgebiet) => f.en.trim().toLowerCase() === v);
-
-        return fach ? fach[targetLang] : moduleValue;
-    };
 
     return(
         <div className="outputbox">
